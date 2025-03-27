@@ -13,29 +13,31 @@ function lineTracking () {
 }
 function funcReverse () {
     reverse = true
-    if (reverseCount == 0) {
-        maqueen.motorStop(maqueen.Motors.All)
-    }
-    if (timerReverse >= 5) {
-    	
+    reverseCount += 1
+    maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CCW, 20)
+    if (reverseCount == 1) {
+        if (timerReverse >= 3) {
+            maqueen.motorStop(maqueen.Motors.All)
+        }
     }
 }
 let d = 0
+let reverseCount = 0
 let timerReverse = 0
 let reverse = false
-let reverseCount = 0
-reverseCount = 0
 reverse = false
 timerReverse = 0
 lineTracking()
-loops.everyInterval(1000, function () {
-    if (reverse == true) {
-        reverseCount += 1
-    }
-})
+reverseCount = 0
 basic.forever(function () {
     d = maqueen.Ultrasonic()
     if (d < 5) {
         funcReverse()
+    }
+})
+basic.forever(function () {
+    basic.pause(1000)
+    if (reverse == true) {
+        timerReverse += 1
     }
 })
